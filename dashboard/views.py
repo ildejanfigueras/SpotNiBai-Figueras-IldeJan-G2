@@ -11,7 +11,7 @@ def home(request):
     """Send each user to the dashboard for their role."""
     if request.user.role == CustomUser.Role.ADMIN:
         return redirect("dashboard:admin_dashboard")
-    return redirect("dashboard:member_dashboard")
+    return redirect("dashboard:user_dashboard")
 
 
 class RoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -32,6 +32,6 @@ class AdminDashboardView(RoleRequiredMixin, TemplateView):
         return context
 
 
-class MemberDashboardView(RoleRequiredMixin, TemplateView):
-    required_role = CustomUser.Role.MEMBER
-    template_name = "dashboard/member_dashboard.html"
+class UserDashboardView(RoleRequiredMixin, TemplateView):
+    required_role = CustomUser.Role.USER
+    template_name = "dashboard/user_dashboard.html"

@@ -10,4 +10,6 @@ urlpatterns = [
         template_name="registration/login.html",
         redirect_authenticated_user=True), name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path("profile/", views.ProfileView.as_view(), name="profile"),
+    path("profile/edit/", views.ProfileUpdateView.as_view(), name="profile_edit"),
 ]

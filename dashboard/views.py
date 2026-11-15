@@ -28,6 +28,8 @@ class AdminDashboardView(RoleRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["total_users"] = CustomUser.objects.count()
+        context["total_registered"] = CustomUser.objects.filter(role=CustomUser.Role.USER).count()
+        context["total_admins"] = CustomUser.objects.filter(role=CustomUser.Role.ADMIN).count()
         context["recent_users"] = CustomUser.objects.order_by("-date_joined")[:5]
         return context
 

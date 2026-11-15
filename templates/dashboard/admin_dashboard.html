@@ -5,21 +5,40 @@
 {% block content %}
 <section class="hero">
   <h1>Admin Dashboard</h1>
-  <p>Welcome back, {{ user.first_name|default:user.username }}. Here is an overview of your platform.</p>
+  <p>Welcome back, {{ user.first_name|default:user.username }}. Manage SpotNiBai users and community content.</p>
 </section>
 
 <div class="grid">
   <div class="card stat-card">
     <div class="stat-value">{{ total_users }}</div>
-    <div class="stat-label">Total users</div>
+    <div class="stat-label">Total accounts</div>
   </div>
-  {% if user.is_staff %}
   <div class="card stat-card">
-    <h3>Admin tools</h3>
-    <p class="muted">Manage accounts and roles in the Django admin site.</p>
-    <a class="btn btn-primary" href="{% url 'admin:index' %}">Open admin site</a>
+    <div class="stat-value">{{ total_registered }}</div>
+    <div class="stat-label">Registered users</div>
   </div>
-  {% endif %}
+  <div class="card stat-card">
+    <div class="stat-value">{{ total_admins }}</div>
+    <div class="stat-label">Administrators</div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h3>Manage user accounts</h3>
+    <p class="muted">View accounts, change roles and deactivate users.</p>
+    {% if user.is_staff %}
+      <a class="btn btn-primary" href="{% url 'admin:accounts_customuser_changelist' %}">Open user list</a>
+    {% endif %}
+  </div>
+  <div class="card card-soon">
+    <h3>Spot submissions <span class="badge">Coming soon</span></h3>
+    <p class="muted">Review places submitted by users.</p>
+  </div>
+  <div class="card card-soon">
+    <h3>Reported content <span class="badge">Coming soon</span></h3>
+    <p class="muted">Handle reports on spots and comments.</p>
+  </div>
 </div>
 
 <div class="card">

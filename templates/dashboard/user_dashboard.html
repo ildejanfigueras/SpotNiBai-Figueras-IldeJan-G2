@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block title %}My Dashboard | SpotNiBai{% endblock %}
-{% block body_class %}dashboard-member{% endblock %}
+{% block body_class %}dashboard-user{% endblock %}
 
 {% block content %}
 <section class="hero">
   <h1>Welcome, {{ user.first_name|default:user.username }}!</h1>
-  <p>This is your personal dashboard.</p>
+  <p>Discover and share interesting places around Cebu City.</p>
 </section>
 
 <div class="grid">
@@ -22,8 +22,18 @@
   </div>
 </div>
 
-<div class="card">
-  <h3>Coming soon</h3>
-  <p class="muted">Member features will appear here in the next phases.</p>
+<div class="grid">
+  <div class="card card-soon">
+    <h3>Submit a spot <span class="badge">Coming soon</span></h3>
+    <p class="muted">Share a place you love with the community.</p>
+  </div>
+  <div class="card card-soon">
+    <h3>Favorite places <span class="badge">Coming soon</span></h3>
+    <p class="muted">Save the spots you want to visit again.</p>
+  </div>
+  <div class="card card-soon">
+    <h3>Ratings &amp; comments <span class="badge">Coming soon</span></h3>
+    <p class="muted">Rate spots and leave comments.</p>
+  </div>
 </div>
 {% endblock %}

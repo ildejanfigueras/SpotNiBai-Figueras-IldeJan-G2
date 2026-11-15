@@ -7,7 +7,7 @@
   --primary: #2563eb;
   --primary-dark: #1d4ed8;
   --admin: #6d28d9;
-  --member: #0f766e;
+  --user: #0f766e;
   --radius: 12px;
 }
 
@@ -105,7 +105,7 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focu
 
 
 .dashboard-admin { --accent: var(--admin); }
-.dashboard-member { --accent: var(--member); }
+.dashboard-user { --accent: var(--user); }
 
 .hero {
   background: var(--accent, var(--primary)); color: #fff;

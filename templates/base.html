@@ -16,7 +16,7 @@
           {% if user.role == "ADMIN" %}
             <a href="{% url 'dashboard:admin_dashboard' %}">Admin Dashboard</a>
           {% else %}
-            <a href="{% url 'dashboard:member_dashboard' %}">My Dashboard</a>
+            <a href="{% url 'dashboard:user_dashboard' %}">My Dashboard</a>
           {% endif %}
           <a href="{% url 'accounts:profile' %}">Profile</a>
           <span class="badge">{{ user.get_role_display }}</span>

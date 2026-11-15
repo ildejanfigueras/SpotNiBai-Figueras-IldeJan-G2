@@ -1,38 +1,46 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}SpotNiBai{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-<body>
-  <nav>
-    <a href="{% url 'dashboard:home' %}">SpotNiBai</a>
-    {% if user.is_authenticated %}
-      {% if user.role == "ADMIN" %}
-        <a href="{% url 'dashboard:admin_dashboard' %}">Admin Dashboard</a>
-      {% else %}
-        <a href="{% url 'dashboard:member_dashboard' %}">My Dashboard</a>
-      {% endif %}
-        <a href="{% url 'accounts:profile' %}">Profile</a>
-      <form method="post" action="{% url 'accounts:logout' %}" style="display:inline">
-        {% csrf_token %}
-        <button type="submit">Log out ({{ user.username }})</button>
-      </form>
-    {% else %}
-      <a href="{% url 'accounts:login' %}">Log in</a>
-      <a href="{% url 'accounts:signup' %}">Sign up</a>
+<body class="{% block body_class %}{% endblock %}">
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="{% url 'dashboard:home' %}">SpotNiBai</a>
+      <nav class="nav-links">
+        {% if user.is_authenticated %}
+          {% if user.role == "ADMIN" %}
+            <a href="{% url 'dashboard:admin_dashboard' %}">Admin Dashboard</a>
+          {% else %}
+            <a href="{% url 'dashboard:member_dashboard' %}">My Dashboard</a>
+          {% endif %}
+          <a href="{% url 'accounts:profile' %}">Profile</a>
+          <span class="badge">{{ user.get_role_display }}</span>
+          <form method="post" action="{% url 'accounts:logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline">Log out</button>
+          </form>
+        {% else %}
+          <a href="{% url 'accounts:login' %}">Log in</a>
+          <a class="btn btn-primary" href="{% url 'accounts:signup' %}">Sign up</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
     {% endif %}
-  </nav>
-
-  {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-
-  <main>{% block content %}{% endblock %}</main>
+    {% block content %}{% endblock %}
+  </main>
 </body>
 </html>

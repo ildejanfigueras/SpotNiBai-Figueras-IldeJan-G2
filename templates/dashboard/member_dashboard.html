@@ -1,11 +1,29 @@
 {% extends "base.html" %}
+{% block title %}My Dashboard | SpotNiBai{% endblock %}
+{% block body_class %}dashboard-member{% endblock %}
+
 {% block content %}
-<h2>Admin Dashboard</h2>
-<p>Total users: {{ total_users }}</p>
-<h3>Newest accounts</h3>
-<ul>
-  {% for u in recent_users %}
-    <li>{{ u.username }} ({{ u.get_role_display }}), joined {{ u.date_joined|date:"M d, Y" }}</li>
-  {% endfor %}
-</ul>
+<section class="hero">
+  <h1>Welcome, {{ user.first_name|default:user.username }}!</h1>
+  <p>This is your personal dashboard.</p>
+</section>
+
+<div class="grid">
+  <div class="card stat-card">
+    <h3>Your profile</h3>
+    <p class="muted">{{ user.email }}</p>
+    <p class="muted">{{ user.contact_number|default:"No contact number yet" }}</p>
+    <a class="btn btn-outline" href="{% url 'accounts:profile' %}">View profile</a>
+  </div>
+  <div class="card stat-card">
+    <h3>Quick actions</h3>
+    <p class="muted">Keep your details up to date.</p>
+    <a class="btn btn-primary" href="{% url 'accounts:profile_edit' %}">Edit profile</a>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Coming soon</h3>
+  <p class="muted">Member features will appear here in the next phases.</p>
+</div>
 {% endblock %}

@@ -1,11 +1,45 @@
 {% extends "base.html" %}
+{% block title %}Admin Dashboard | SpotNiBai{% endblock %}
+{% block body_class %}dashboard-admin{% endblock %}
+
 {% block content %}
-<h2>Admin Dashboard</h2>
-<p>Total users: {{ total_users }}</p>
-<h3>Newest accounts</h3>
-<ul>
-  {% for u in recent_users %}
-    <li>{{ u.username }} ({{ u.get_role_display }}), joined {{ u.date_joined|date:"M d, Y" }}</li>
-  {% endfor %}
-</ul>
+<section class="hero">
+  <h1>Admin Dashboard</h1>
+  <p>Welcome back, {{ user.first_name|default:user.username }}. Here is an overview of your platform.</p>
+</section>
+
+<div class="grid">
+  <div class="card stat-card">
+    <div class="stat-value">{{ total_users }}</div>
+    <div class="stat-label">Total users</div>
+  </div>
+  {% if user.is_staff %}
+  <div class="card stat-card">
+    <h3>Admin tools</h3>
+    <p class="muted">Manage accounts and roles in the Django admin site.</p>
+    <a class="btn btn-primary" href="{% url 'admin:index' %}">Open admin site</a>
+  </div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h3>Newest accounts</h3>
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr><th>Username</th><th>Email</th><th>Role</th><th>Joined</th></tr>
+      </thead>
+      <tbody>
+        {% for u in recent_users %}
+        <tr>
+          <td>{{ u.username }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.get_role_display }}</td>
+          <td>{{ u.date_joined|date:"M d, Y" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Admin Dashboard</h2>
+<p>Total users: {{ total_users }}</p>
+<h3>Newest accounts</h3>
+<ul>
+  {% for u in recent_users %}
+    <li>{{ u.username }} ({{ u.get_role_display }}), joined {{ u.date_joined|date:"M d, Y" }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Review Queue | SpotNiBai{% endblock %}
+{% block body_class %}dashboard-admin{% endblock %}
+
+{% block content %}
+<div class="page-actions">
+  <h2>Review queue</h2>
+  <span class="badge badge-pending">{{ paginator.count|default:0 }} pending</span>
+</div>
+
+{% if spots %}
+  <div class="card">
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr><th>Spot</th><th>Category</th><th>Submitted by</th><th>Submitted</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          {% for spot in spots %}
+          <tr>
+            <td><a href="{% url 'spots:detail' spot.pk %}">{{ spot.name }}</a></td>
+            <td>{{ spot.category.name }}</td>
+            <td>{{ spot.owner.username }}</td>
+            <td>{{ spot.created_at|date:"M d, Y" }}</td>
+            <td>
+              <form method="post" action="{% url 'spots:approve' spot.pk %}" class="inline-form">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success btn-sm">Approve</button>
+              </form>
+              <form method="post" action="{% url 'spots:reject' spot.pk %}" class="inline-form">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% if is_paginated %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+      <span class="muted">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline" href="?page={{ page_obj.next_page_number }}">Next</a>
+      {% endif %}
+    </div>
+  {% endif %}
+{% else %}
+  <div class="card empty-state">Nothing to review. All submissions have been handled.</div>
+{% endif %}
+{% endblock %}

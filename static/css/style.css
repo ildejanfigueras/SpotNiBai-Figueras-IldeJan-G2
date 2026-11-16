@@ -179,3 +179,7 @@ textarea { resize: vertical; }
 .badge-pending { background: #fef3c7; color: #92400e; }
 .badge-approved { background: #dcfce7; color: #166534; }
 .badge-rejected { background: #fee2e2; color: #991b1b; }
+
+.btn-danger { background: #dc2626; color: #fff; }
+.btn-danger:hover { background: #b91c1c; }
+.divider { border: 0; border-top: 1px solid var(--border); margin: 1.25rem 0; }

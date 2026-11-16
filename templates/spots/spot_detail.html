@@ -29,5 +29,13 @@
   <a class="btn btn-primary" target="_blank" rel="noopener"
      href="https://www.google.com/maps?q={{ spot.latitude|unlocalize }},{{ spot.longitude|unlocalize }}">Open in Google Maps</a>
   <a class="btn btn-outline" href="{% url 'spots:list' %}">Back to spots</a>
+
+  {% if user.id == spot.owner_id or user.role == "ADMIN" %}
+  <hr class="divider">
+  {% if user.id == spot.owner_id and user.role == "USER" %}
+    <a class="btn btn-outline" href="{% url 'spots:edit' spot.pk %}">Edit spot</a>
+  {% endif %}
+  <a class="btn btn-danger" href="{% url 'spots:delete' spot.pk %}">Delete spot</a>
+  {% endif %}
 </div>
 {% endblock %}

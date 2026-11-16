@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Browse Spots | SpotNiBai{% endblock %}
+
+{% block content %}
+<div class="page-actions">
+  <h2>Discover spots in Cebu</h2>
+  {% if user.role == "USER" %}
+    <a class="btn btn-primary" href="{% url 'spots:create' %}">Submit a spot</a>
+  {% endif %}
+</div>
+
+<form method="get" class="filter-bar">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search by name or address">
+  <select name="category">
+    <option value="">All categories</option>
+    {% for c in categories %}
+      <option value="{{ c.pk }}" {% if c.pk|stringformat:"s" == selected_category %}selected{% endif %}>{{ c.name }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" class="btn btn-primary">Filter</button>
+  <a class="btn btn-outline" href="{% url 'spots:list' %}">Reset</a>
+</form>
+
+{% if spots %}
+  <div class="spot-grid">
+    {% for spot in spots %}
+      <article class="card spot-card">
+        {% with photo=spot.cover_photo %}
+          {% if photo %}
+            <img class="spot-card-img" src="{{ photo.image.url }}" alt="{{ spot.name }}">
+          {% else %}
+            <div class="spot-card-placeholder">No photo</div>
+          {% endif %}
+        {% endwith %}
+        <div class="spot-card-body">
+          <h3><a href="{% url 'spots:detail' spot.pk %}">{{ spot.name }}</a></h3>
+          <span class="badge">{{ spot.category.name }}</span>
+          <p class="spot-meta">{{ spot.address }}</p>
+          <p class="spot-meta">{% if spot.avg_rating %}Rating: {{ spot.avg_rating }} / 5{% else %}No ratings yet{% endif %}</p>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+
+  {% if is_paginated %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+      <span class="muted">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+      {% endif %}
+    </div>
+  {% endif %}
+{% else %}
+  <div class="card empty-state">No approved spots found yet.</div>
+{% endif %}
+{% endblock %}

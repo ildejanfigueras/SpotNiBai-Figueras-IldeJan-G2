@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load l10n %}
+{% block title %}{{ spot.name }} | SpotNiBai{% endblock %}
+
+{% block content %}
+<div class="card">
+  {% with photo=spot.cover_photo %}
+    {% if photo %}
+      <img class="spot-detail-photo" src="{{ photo.image.url }}" alt="{{ spot.name }}">
+    {% endif %}
+  {% endwith %}
+
+  <h2>{{ spot.name }}</h2>
+  <p>
+    <span class="badge">{{ spot.category.name }}</span>
+    <span class="badge badge-{{ spot.status|lower }}">{{ spot.get_status_display }}</span>
+  </p>
+
+  <p>{{ spot.description|linebreaksbr }}</p>
+
+  <ul class="detail-list">
+    <li><span>Address</span><strong>{{ spot.address }}</strong></li>
+    <li><span>Coordinates</span><strong>{{ spot.latitude|unlocalize }}, {{ spot.longitude|unlocalize }}</strong></li>
+    <li><span>Rating</span><strong>{% if spot.avg_rating %}{{ spot.avg_rating }} / 5{% else %}No ratings yet{% endif %}</strong></li>
+    <li><span>Shared by</span><strong>{{ spot.owner.username }}</strong></li>
+    <li><span>Posted</span><strong>{{ spot.created_at|date:"M d, Y" }}</strong></li>
+  </ul>
+
+  <a class="btn btn-primary" target="_blank" rel="noopener"
+     href="https://www.google.com/maps?q={{ spot.latitude|unlocalize }},{{ spot.longitude|unlocalize }}">Open in Google Maps</a>
+  <a class="btn btn-outline" href="{% url 'spots:list' %}">Back to spots</a>
+</div>
+{% endblock %}

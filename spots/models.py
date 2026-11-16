@@ -51,6 +51,14 @@ class Spot(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def cover_photo(self):
+        photos = list(self.photos.all())
+        for photo in photos:
+            if photo.is_cover:
+                return photo
+        return photos[0] if photos else None
+
 
 class SpotPhoto(models.Model):
     spot = models.ForeignKey(Spot, on_delete=models.CASCADE, related_name="photos")

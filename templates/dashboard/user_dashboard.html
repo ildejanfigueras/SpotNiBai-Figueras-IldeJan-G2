@@ -10,23 +10,42 @@
 
 <div class="grid">
   <div class="card stat-card">
-    <h3>Your profile</h3>
-    <p class="muted">{{ user.email }}</p>
-    <p class="muted">{{ user.contact_number|default:"No contact number yet" }}</p>
-    <a class="btn btn-outline" href="{% url 'accounts:profile' %}">View profile</a>
+    <div class="stat-value">{{ total_spots }}</div>
+    <div class="stat-label">Spots submitted</div>
   </div>
   <div class="card stat-card">
-    <h3>Quick actions</h3>
-    <p class="muted">Keep your details up to date.</p>
-    <a class="btn btn-primary" href="{% url 'accounts:profile_edit' %}">Edit profile</a>
+    <div class="stat-value">{{ approved_spots }}</div>
+    <div class="stat-label">Approved</div>
+  </div>
+  <div class="card stat-card">
+    <div class="stat-value">{{ pending_spots }}</div>
+    <div class="stat-label">Waiting for review</div>
+  </div>
+  <div class="card stat-card">
+    <div class="stat-value">{{ rejected_spots }}</div>
+    <div class="stat-label">Rejected</div>
   </div>
 </div>
 
 <div class="grid">
-  <div class="card card-soon">
-    <h3>Submit a spot <span class="badge">Coming soon</span></h3>
+  <div class="card">
+    <h3>Submit a spot</h3>
     <p class="muted">Share a place you love with the community.</p>
+    <a class="btn btn-primary" href="{% url 'spots:create' %}">Submit a spot</a>
   </div>
+  <div class="card">
+    <h3>My spots</h3>
+    <p class="muted">Track, edit or delete the spots you submitted.</p>
+    <a class="btn btn-outline" href="{% url 'spots:my_spots' %}">View my spots</a>
+  </div>
+  <div class="card">
+    <h3>Browse spots</h3>
+    <p class="muted">Explore approved places around Cebu City.</p>
+    <a class="btn btn-outline" href="{% url 'spots:list' %}">Browse spots</a>
+  </div>
+</div>
+
+<div class="grid">
   <div class="card card-soon">
     <h3>Favorite places <span class="badge">Coming soon</span></h3>
     <p class="muted">Save the spots you want to visit again.</p>
@@ -35,5 +54,12 @@
     <h3>Ratings &amp; comments <span class="badge">Coming soon</span></h3>
     <p class="muted">Rate spots and leave comments.</p>
   </div>
+</div>
+
+<div class="card">
+  <h3>Your profile</h3>
+  <p class="muted">{{ user.email }} · {{ user.contact_number|default:"No contact number yet" }}</p>
+  <a class="btn btn-outline" href="{% url 'accounts:profile' %}">View profile</a>
+  <a class="btn btn-outline" href="{% url 'accounts:profile_edit' %}">Edit profile</a>
 </div>
 {% endblock %}

@@ -10,6 +10,14 @@
 
 <div class="grid">
   <div class="card stat-card">
+    <div class="stat-value">{{ pending_count }}</div>
+    <div class="stat-label">Spots waiting for review</div>
+  </div>
+  <div class="card stat-card">
+    <div class="stat-value">{{ approved_count }}</div>
+    <div class="stat-label">Approved spots</div>
+  </div>
+  <div class="card stat-card">
     <div class="stat-value">{{ total_users }}</div>
     <div class="stat-label">Total accounts</div>
   </div>
@@ -17,28 +25,50 @@
     <div class="stat-value">{{ total_registered }}</div>
     <div class="stat-label">Registered users</div>
   </div>
-  <div class="card stat-card">
-    <div class="stat-value">{{ total_admins }}</div>
-    <div class="stat-label">Administrators</div>
-  </div>
 </div>
 
 <div class="grid">
   <div class="card">
+    <h3>Review queue</h3>
+    <p class="muted">Approve or reject spots submitted by users.</p>
+    <a class="btn btn-primary" href="{% url 'spots:review_queue' %}">Open review queue</a>
+  </div>
+  <div class="card">
     <h3>Manage user accounts</h3>
     <p class="muted">View accounts, change roles and deactivate users.</p>
     {% if user.is_staff %}
-      <a class="btn btn-primary" href="{% url 'admin:accounts_customuser_changelist' %}">Open user list</a>
+      <a class="btn btn-outline" href="{% url 'admin:accounts_customuser_changelist' %}">Open user list</a>
     {% endif %}
-  </div>
-  <div class="card card-soon">
-    <h3>Spot submissions <span class="badge">Coming soon</span></h3>
-    <p class="muted">Review places submitted by users.</p>
   </div>
   <div class="card card-soon">
     <h3>Reported content <span class="badge">Coming soon</span></h3>
     <p class="muted">Handle reports on spots and comments.</p>
   </div>
+</div>
+
+<div class="card">
+  <h3>Newest pending spots</h3>
+  {% if pending_spots %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr><th>Spot</th><th>Category</th><th>Submitted by</th><th>Submitted</th></tr>
+      </thead>
+      <tbody>
+        {% for s in pending_spots %}
+        <tr>
+          <td><a href="{% url 'spots:detail' s.pk %}">{{ s.name }}</a></td>
+          <td>{{ s.category.name }}</td>
+          <td>{{ s.owner.username }}</td>
+          <td>{{ s.created_at|date:"M d, Y" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <p class="muted">Nothing to review right now.</p>
+  {% endif %}
 </div>
 
 <div class="card">

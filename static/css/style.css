@@ -183,3 +183,8 @@ textarea { resize: vertical; }
 .btn-danger { background: #dc2626; color: #fff; }
 .btn-danger:hover { background: #b91c1c; }
 .divider { border: 0; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+
+.btn-success { background: #16a34a; color: #fff; }
+.btn-success:hover { background: #15803d; }
+.btn-sm { padding: 0.3rem 0.7rem; font-size: 0.85rem; }
+.inline-form { display: inline; margin: 0; }

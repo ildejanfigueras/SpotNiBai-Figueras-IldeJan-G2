@@ -30,6 +30,19 @@
      href="https://www.google.com/maps?q={{ spot.latitude|unlocalize }},{{ spot.longitude|unlocalize }}">Open in Google Maps</a>
   <a class="btn btn-outline" href="{% url 'spots:list' %}">Back to spots</a>
 
+    {% if user.role == "ADMIN" and spot.status == "PENDING" %}
+  <hr class="divider">
+  <p class="muted">This spot is waiting for review.</p>
+  <form method="post" action="{% url 'spots:approve' spot.pk %}" class="inline-form">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success">Approve</button>
+  </form>
+  <form method="post" action="{% url 'spots:reject' spot.pk %}" class="inline-form">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Reject</button>
+  </form>
+  {% endif %}
+  
   {% if user.id == spot.owner_id or user.role == "ADMIN" %}
   <hr class="divider">
   {% if user.id == spot.owner_id and user.role == "USER" %}

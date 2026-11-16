@@ -13,8 +13,9 @@
       <a class="brand" href="{% url 'dashboard:home' %}">SpotNiBai</a>
       <nav class="nav-links">
         {% if user.is_authenticated %}
-          {% if user.role == "ADMIN" %}
-            <a href="{% url 'dashboard:admin_dashboard' %}">Admin Dashboard</a>
+            {% if user.role == "ADMIN" %}
+              <a href="{% url 'dashboard:admin_dashboard' %}">Admin Dashboard</a>
+              <a href="{% url 'spots:review_queue' %}">Review Queue</a>
           {% else %}
             <a href="{% url 'dashboard:user_dashboard' %}">My Dashboard</a>
           {% endif %}

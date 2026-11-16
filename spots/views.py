@@ -5,8 +5,9 @@ from django.db.models import Q
 from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import (
-    CreateView, DeleteView, DetailView, ListView, UpdateView,
+    CreateView, DeleteView, DetailView, ListView, UpdateView, View,
 )
+from django.shortcuts import get_object_or_404, redirect
 
 from accounts.models import CustomUser
 from dashboard.views import RoleRequiredMixin
@@ -138,3 +139,32 @@ class SpotDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         if self.request.user.role == CustomUser.Role.ADMIN:
             return reverse_lazy("spots:list")
         return reverse_lazy("spots:my_spots")
+
+class ReviewQueueView(RoleRequiredMixin, ListView):
+    """Administrators see every pending spot, oldest first."""
+    required_role = CustomUser.Role.ADMIN
+    template_name = "spots/review_queue.html"
+    context_object_name = "spots"
+    paginate_by = 10
+
+    def get_queryset(self):
+        return (
+            Spot.objects.filter(status=Spot.Status.PENDING)
+            .select_related("category", "owner")
+            .prefetch_related("photos")
+            .order_by("created_at")
+        )
+
+class SpotReviewActionView(RoleRequiredMixin, View):
+    """Approve or reject a spot. POST only, administrators only."""
+    required_role = CustomUser.Role.ADMIN
+    http_method_names = ["post"]
+    new_status = None
+    success_text = ""
+
+    def post(self, request, pk):
+        spot = get_object_or_404(Spot, pk=pk)
+        spot.status = self.new_status
+        spot.save(update_fields=["status", "updated_at"])
+        messages.success(request, f'"{spot.name}" {self.success_text}')
+        return redirect("spots:review_queue")

@@ -18,6 +18,10 @@
           {% else %}
             <a href="{% url 'dashboard:user_dashboard' %}">My Dashboard</a>
           {% endif %}
+          <a href="{% url 'spots:list' %}">Browse Spots</a>
+          {% if user.role == "USER" %}
+            <a href="{% url 'spots:my_spots' %}">My Spots</a>
+          {% endif %}
           <a href="{% url 'accounts:profile' %}">Profile</a>
           <span class="badge">{{ user.get_role_display }}</span>
           <form method="post" action="{% url 'accounts:logout' %}">

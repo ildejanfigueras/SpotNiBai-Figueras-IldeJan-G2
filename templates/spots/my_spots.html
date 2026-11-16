@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}My Spots | SpotNiBai{% endblock %}
+
+{% block content %}
+<div class="page-actions">
+  <h2>My spots</h2>
+  <a class="btn btn-primary" href="{% url 'spots:create' %}">Submit a spot</a>
+</div>
+
+{% if spots %}
+  <div class="card">
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr><th>Name</th><th>Category</th><th>Status</th><th>Submitted</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          {% for spot in spots %}
+          <tr>
+            <td><a href="{% url 'spots:detail' spot.pk %}">{{ spot.name }}</a></td>
+            <td>{{ spot.category.name }}</td>
+            <td><span class="badge badge-{{ spot.status|lower }}">{{ spot.get_status_display }}</span></td>
+            <td>{{ spot.created_at|date:"M d, Y" }}</td>
+            <td>
+              <a href="{% url 'spots:edit' spot.pk %}">Edit</a> ·
+              <a href="{% url 'spots:delete' spot.pk %}">Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% if is_paginated %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+      <span class="muted">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline" href="?page={{ page_obj.next_page_number }}">Next</a>
+      {% endif %}
+    </div>
+  {% endif %}
+{% else %}
+  <div class="card empty-state">You haven't submitted any spots yet.</div>
+{% endif %}
+{% endblock %}

@@ -4,14 +4,15 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
 from django.http import Http404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import (
+    CreateView, DeleteView, DetailView, ListView, UpdateView,
+)
 
 from accounts.models import CustomUser
 from dashboard.views import RoleRequiredMixin
 
 from .forms import SpotForm
 from .models import Category, Spot
-
 
 class SpotListView(LoginRequiredMixin, ListView):
     """Browse approved spots, with search and a category filter."""
@@ -94,3 +95,46 @@ class MySpotListView(RoleRequiredMixin, ListView):
             .select_related("category")
             .prefetch_related("photos")
         )
+
+class SpotUpdateView(RoleRequiredMixin, SuccessMessageMixin, UpdateView):
+    """Owners edit their own spots. Anyone else's spot is a 404."""
+    required_role = CustomUser.Role.USER
+    form_class = SpotForm
+    template_name = "spots/spot_form.html"
+    success_message = "Your spot was updated and is waiting for admin approval again."
+
+    def get_queryset(self):
+        return Spot.objects.filter(owner=self.request.user)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["owner"] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        form.instance.status = Spot.Status.PENDING   # edits need a new review
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Please fix the errors below and try again.")
+        return super().form_invalid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("spots:detail", kwargs={"pk": self.object.pk})
+
+
+class SpotDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    """Owners delete their own spots. Administrators can delete any spot."""
+    template_name = "spots/spot_confirm_delete.html"
+    context_object_name = "spot"
+    success_message = "The spot was deleted."
+
+    def get_queryset(self):
+        if self.request.user.role == CustomUser.Role.ADMIN:
+            return Spot.objects.all()
+        return Spot.objects.filter(owner=self.request.user)
+
+    def get_success_url(self):
+        if self.request.user.role == CustomUser.Role.ADMIN:
+            return reverse_lazy("spots:list")
+        return reverse_lazy("spots:my_spots")

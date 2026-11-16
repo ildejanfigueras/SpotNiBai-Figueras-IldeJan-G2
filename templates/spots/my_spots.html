@@ -12,7 +12,7 @@
     <div class="table-wrap">
       <table class="table">
         <thead>
-          <tr><th>Name</th><th>Category</th><th>Status</th><th>Submitted</th></tr>
+          <tr><th>Name</th><th>Category</th><th>Status</th><th>Submitted</th><th>Actions</th></tr>
         </thead>
         <tbody>
           {% for spot in spots %}
@@ -21,6 +21,10 @@
             <td>{{ spot.category.name }}</td>
             <td><span class="badge badge-{{ spot.status|lower }}">{{ spot.get_status_display }}</span></td>
             <td>{{ spot.created_at|date:"M d, Y" }}</td>
+            <td>
+              <a href="{% url 'spots:edit' spot.pk %}">Edit</a> ·
+              <a href="{% url 'spots:delete' spot.pk %}">Delete</a>
+            </td>
           </tr>
           {% endfor %}
         </tbody>

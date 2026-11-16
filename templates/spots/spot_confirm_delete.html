@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Delete spot | SpotNiBai{% endblock %}
+
+{% block content %}
+<div class="card form-card">
+  <h2>Delete this spot?</h2>
+  <p>You are about to delete <strong>{{ spot.name }}</strong>. This also removes its photos and can't be undone.</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, delete</button>
+    <a class="btn btn-outline" href="{% url 'spots:detail' spot.pk %}">Cancel</a>
+  </form>
+</div>
+{% endblock %}

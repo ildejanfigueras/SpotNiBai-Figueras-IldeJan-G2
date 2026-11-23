@@ -1,9 +1,15 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Browse Spots | SpotNiBai{% endblock %}
+{% block body_class %}spots-page{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/dashboard.css' %}"><link rel="stylesheet" href="{% static 'css/spots.css' %}">{% endblock %}
 
 {% block content %}
-<div class="page-actions">
-  <h2>Discover spots in Cebu</h2>
+<div class="page-head">
+  <div>
+    <h1>Discover spots in Cebu</h1>
+    <p class="page-head-sub">Places shared by the community and approved by an administrator.</p>
+  </div>
   {% if user.role == "USER" %}
     <a class="btn btn-primary" href="{% url 'spots:create' %}">Submit a spot</a>
   {% endif %}

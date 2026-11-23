@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load l10n %}
+{% load static %}
 {% block title %}{{ spot.name }} | SpotNiBai{% endblock %}
+{% block body_class %}spots-page{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/dashboard.css' %}"><link rel="stylesheet" href="{% static 'css/spots.css' %}">{% endblock %}
 
 {% block content %}
 <div class="card">
@@ -10,8 +13,8 @@
     {% endif %}
   {% endwith %}
 
-  <h2>{{ spot.name }}</h2>
-  <p>
+  <h1 class="sp-title">{{ spot.name }}</h1>
+  <p class="sp-badges">
     <span class="badge">{{ spot.category.name }}</span>
     <span class="badge badge-{{ spot.status|lower }}">{{ spot.get_status_display }}</span>
   </p>
@@ -26,29 +29,35 @@
     <li><span>Posted</span><strong>{{ spot.created_at|date:"M d, Y" }}</strong></li>
   </ul>
 
-  <a class="btn btn-primary" target="_blank" rel="noopener"
-     href="https://www.google.com/maps?q={{ spot.latitude|unlocalize }},{{ spot.longitude|unlocalize }}">Open in Google Maps</a>
-  <a class="btn btn-outline" href="{% url 'spots:list' %}">Back to spots</a>
+  <div class="sp-actions">
+    <a class="btn btn-primary" target="_blank" rel="noopener"
+       href="https://www.google.com/maps?q={{ spot.latitude|unlocalize }},{{ spot.longitude|unlocalize }}">Open in Google Maps</a>
+    <a class="btn btn-outline" href="{% url 'spots:list' %}">Back to spots</a>
+  </div>
 
-    {% if user.role == "ADMIN" and spot.status == "PENDING" %}
-  <hr class="divider">
-  <p class="muted">This spot is waiting for review.</p>
-  <form method="post" action="{% url 'spots:approve' spot.pk %}" class="inline-form">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-success">Approve</button>
-  </form>
-  <form method="post" action="{% url 'spots:reject' spot.pk %}" class="inline-form">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Reject</button>
-  </form>
+  {% if user.role == "ADMIN" and spot.status == "PENDING" %}
+  <div class="sp-review">
+    <p>This spot is waiting for review.</p>
+    <div class="sp-actions">
+      <form method="post" action="{% url 'spots:approve' spot.pk %}" class="inline-form">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Approve</button>
+      </form>
+      <form method="post" action="{% url 'spots:reject' spot.pk %}" class="inline-form">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Reject</button>
+      </form>
+    </div>
+  </div>
   {% endif %}
-  
+
   {% if user.id == spot.owner_id or user.role == "ADMIN" %}
-  <hr class="divider">
-  {% if user.id == spot.owner_id and user.role == "USER" %}
-    <a class="btn btn-outline" href="{% url 'spots:edit' spot.pk %}">Edit spot</a>
-  {% endif %}
-  <a class="btn btn-danger" href="{% url 'spots:delete' spot.pk %}">Delete spot</a>
+  <div class="sp-manage sp-actions">
+    {% if user.id == spot.owner_id and user.role == "USER" %}
+      <a class="btn btn-outline" href="{% url 'spots:edit' spot.pk %}">Edit spot</a>
+    {% endif %}
+    <a class="btn btn-danger" href="{% url 'spots:delete' spot.pk %}">Delete spot</a>
+  </div>
   {% endif %}
 </div>
 {% endblock %}

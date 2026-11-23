@@ -4,7 +4,8 @@
    so no other page is affected. These also retheme the navbar and the
    existing .btn / .badge classes from style.css on the dashboards. */
 body.dashboard-admin,
-body.dashboard-user {
+body.dashboard-user,
+body.spots-page {
   --sea-900: #0a3f48;
   --accent: #0e7c86;
   --accent-hover: #0b666e;
@@ -29,12 +30,24 @@ body.dashboard-user {
   -webkit-font-smoothing: antialiased;
 }
 
-:is(body.dashboard-admin, body.dashboard-user) .badge {
+:is(body.dashboard-admin, body.dashboard-user, body.spots-page) .badge {
   background: #e3f1f3;
   color: var(--sea-900);
 }
 
-:is(body.dashboard-admin, body.dashboard-user) .btn { font-size: 0.9rem; }
+:is(body.dashboard-admin, body.dashboard-user, body.spots-page) .btn { font-size: 0.9rem; }
+
+/* Flash messages, same colors as the auth alerts */
+:is(body.dashboard-admin, body.dashboard-user, body.spots-page) .messages li {
+  background: #e6f2f4; border-color: #bcd9de; color: #0b5560;
+  border-radius: var(--radius);
+}
+:is(body.dashboard-admin, body.dashboard-user, body.spots-page) .messages li.success {
+  background: #e8f5ec; border-color: #bfe0cb; color: #1b6b3a;
+}
+:is(body.dashboard-admin, body.dashboard-user, body.spots-page) .messages li.error {
+  background: #fdecea; border-color: #f3c3be; color: #b3261e;
+}
 
 /* Hero: same street grid as the auth side panel */
 .dash-hero {
@@ -193,7 +206,7 @@ body.dashboard-user {
 }
 
 .dash-table tbody tr:last-child td { border-bottom: 0; }
-.dash-table a { color: var(--accent); font-weight: 600; }
+.dash-table a:not(.btn) { color: var(--accent); font-weight: 600; }
 
 .dash-empty {
   margin: 0;

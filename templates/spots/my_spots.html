@@ -1,16 +1,22 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}My Spots | SpotNiBai{% endblock %}
+{% block body_class %}spots-page{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/dashboard.css' %}"><link rel="stylesheet" href="{% static 'css/spots.css' %}">{% endblock %}
 
 {% block content %}
-<div class="page-actions">
-  <h2>My spots</h2>
+<div class="page-head">
+  <div>
+    <h1>My spots</h1>
+    <p class="page-head-sub">Track the status of the places you submitted.</p>
+  </div>
   <a class="btn btn-primary" href="{% url 'spots:create' %}">Submit a spot</a>
 </div>
 
 {% if spots %}
-  <div class="card">
+  <section class="dash-panel">
     <div class="table-wrap">
-      <table class="table">
+      <table class="dash-table">
         <thead>
           <tr><th>Name</th><th>Category</th><th>Status</th><th>Submitted</th><th>Actions</th></tr>
         </thead>
@@ -22,15 +28,17 @@
             <td><span class="badge badge-{{ spot.status|lower }}">{{ spot.get_status_display }}</span></td>
             <td>{{ spot.created_at|date:"M d, Y" }}</td>
             <td>
-              <a href="{% url 'spots:edit' spot.pk %}">Edit</a> ·
-              <a href="{% url 'spots:delete' spot.pk %}">Delete</a>
+              <div class="row-actions">
+                <a class="btn btn-outline btn-sm" href="{% url 'spots:edit' spot.pk %}">Edit</a>
+                <a class="btn btn-danger btn-sm" href="{% url 'spots:delete' spot.pk %}">Delete</a>
+              </div>
             </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
-  </div>
+  </section>
 
   {% if is_paginated %}
     <div class="pagination">

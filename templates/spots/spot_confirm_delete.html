@@ -1,14 +1,19 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Delete spot | SpotNiBai{% endblock %}
+{% block body_class %}spots-page{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/dashboard.css' %}"><link rel="stylesheet" href="{% static 'css/spots.css' %}">{% endblock %}
 
 {% block content %}
-<div class="card form-card">
-  <h2>Delete this spot?</h2>
+<div class="card form-card confirm-card">
+  <h1>Delete this spot?</h1>
   <p>You are about to delete <strong>{{ spot.name }}</strong>. This also removes its photos and can't be undone.</p>
   <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Yes, delete</button>
-    <a class="btn btn-outline" href="{% url 'spots:detail' spot.pk %}">Cancel</a>
+    <div class="confirm-actions">
+      <button type="submit" class="btn btn-danger">Yes, delete</button>
+      <a class="btn btn-outline" href="{% url 'spots:detail' spot.pk %}">Cancel</a>
+    </div>
   </form>
 </div>
 {% endblock %}

@@ -1,0 +1,125 @@
+/* SpotNiBai spots pages (browse, detail, form, my spots, review queue, delete).
+   Load after dashboard.css, which supplies the palette and the table styles. */
+
+body.spots-page .card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+
+/* Page header */
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.page-head h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.page-head-sub { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.9rem; }
+
+/* Fields */
+body.spots-page :is(input, select, textarea):focus {
+  outline: 2px solid transparent;
+  outline-offset: 0;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(14, 124, 134, 0.18);
+}
+
+body.spots-page :is(input[type="text"], input[type="email"], input[type="number"], select, textarea) {
+  padding: 0.65rem 0.8rem;
+  border-color: var(--line);
+}
+
+.filter-bar {
+  padding: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+/* Spot cards */
+body.spots-page .spot-grid { gap: 1.25rem; }
+
+body.spots-page .spot-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: none;
+  transition: border-color 0.15s;
+}
+
+body.spots-page .spot-card:hover { border-color: var(--accent); }
+
+body.spots-page .spot-card-placeholder {
+  background: var(--wash);
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+}
+
+.spot-card-body h3 { font-size: 1.05rem; }
+.spot-card-body h3 a { color: var(--ink); }
+.spot-card-body h3 a:hover { color: var(--accent); text-decoration: none; }
+
+/* Status badges */
+body.spots-page .badge-pending { background: var(--warn-bg); color: var(--warn); }
+body.spots-page .badge-approved { background: #e8f5ec; color: #1b6b3a; }
+body.spots-page .badge-rejected { background: #fdecea; color: #b3261e; }
+
+/* Detail page */
+.sp-title { margin: 0 0 0.5rem; font-size: 1.6rem; font-weight: 650; letter-spacing: -0.01em; }
+.sp-badges { display: flex; gap: 0.4rem; flex-wrap: wrap; margin: 0 0 1rem; }
+.sp-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.sp-actions .inline-form { display: inline-flex; }
+
+body.spots-page .spot-detail-photo { border-radius: var(--radius); }
+
+.sp-review {
+  margin-top: 1.5rem;
+  padding: 1rem 1.1rem;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-line);
+  border-radius: var(--radius);
+}
+
+.sp-review p { margin: 0 0 0.75rem; color: var(--warn); font-size: 0.9rem; }
+
+.sp-manage {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+/* Tables */
+.row-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
+.row-actions .inline-form { display: inline-flex; }
+.dash-table td:last-child, .dash-table th:last-child { white-space: nowrap; }
+
+/* Form and delete confirmation */
+body.spots-page .form-card { padding: 1.75rem; }
+.form-card h1 { margin: 0 0 0.5rem; font-size: 1.5rem; font-weight: 650; letter-spacing: -0.01em; }
+
+.confirm-card { border-top: 3px solid #b3261e; }
+.confirm-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.25rem; }
+
+/* Empty state */
+body.spots-page .empty-state {
+  background: transparent;
+  border-style: dashed;
+  color: var(--muted);
+}
+
+body.spots-page .pagination { margin: 1.5rem 0; }
+
+@media (max-width: 600px) {
+  body.spots-page .form-card { padding: 1.25rem; }
+}

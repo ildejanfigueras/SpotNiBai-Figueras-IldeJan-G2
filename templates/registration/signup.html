@@ -1,13 +1,30 @@
-{% extends "base.html" %}
-{% block title %}Sign up | SpotNiBai{% endblock %}
+{% extends "auth_base.html" %}
+
+{% block title %}Create account | SpotNiBai{% endblock %}
+
 {% block content %}
-<div class="card auth-card">
-  <h2>Create your account</h2>
-  <form method="post">
+  <h1 class="auth-title">Create your account</h1>
+  <p class="auth-subtitle">Save favorite places and share your own spots.</p>
+
+  <form method="post" class="auth-form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+    {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+
+    {% if form.non_field_errors %}
+      <div class="alert error" role="alert">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    {% for field in form.visible_fields %}
+      <div class="field{% if field.errors %} has-error{% endif %}">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<div class="help">{{ field.help_text }}</div>{% endif %}
+        {{ field.errors }}
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="btn">Create account</button>
   </form>
-  <p class="auth-switch">Already registered? <a href="{% url 'accounts:login' %}">Log in</a></p>
-</div>
+
+  <p class="auth-switch">Already have an account? <a href="{% url 'accounts:login' %}">Log in</a></p>
 {% endblock %}

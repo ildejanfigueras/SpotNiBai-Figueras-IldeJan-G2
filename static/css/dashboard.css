@@ -1,0 +1,221 @@
+/* SpotNiBai dashboards (admin and user). Loaded on top of style.css. */
+
+/* Same palette as the auth pages. Scoped to the dashboard body classes,
+   so no other page is affected. These also retheme the navbar and the
+   existing .btn / .badge classes from style.css on the dashboards. */
+body.dashboard-admin,
+body.dashboard-user {
+  --sea-900: #0a3f48;
+  --accent: #0e7c86;
+  --accent-hover: #0b666e;
+  --sand: #f4d58d;
+  --surface: #ffffff;
+  --ink: #12262c;
+  --muted: #586c73;
+  --line: #d5dee1;
+  --wash: #f5f8f9;
+  --warn: #7a5a00;
+  --warn-bg: #fdf3d7;
+  --warn-line: #ead58f;
+
+  --primary: var(--accent);
+  --primary-dark: var(--accent-hover);
+  --bg: var(--wash);
+  --text: var(--ink);
+  --border: var(--line);
+  --card: var(--surface);
+  --radius: 8px;
+
+  -webkit-font-smoothing: antialiased;
+}
+
+:is(body.dashboard-admin, body.dashboard-user) .badge {
+  background: #e3f1f3;
+  color: var(--sea-900);
+}
+
+:is(body.dashboard-admin, body.dashboard-user) .btn { font-size: 0.9rem; }
+
+/* Hero: same street grid as the auth side panel */
+.dash-hero {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  padding: 2rem 2rem 2.25rem;
+  color: #fff;
+  background: var(--sea-900);
+  border-radius: 12px;
+}
+
+.dash-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+.dash-hero > * { position: relative; }
+
+.dash-eyebrow {
+  margin: 0 0 0.5rem;
+  color: var(--sand);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dash-hero h1 {
+  margin: 0 0 0.35rem;
+  font-size: 1.75rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.dash-hero p {
+  max-width: 38em;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* Stat cards */
+.dash-stats {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.dash-stat {
+  padding: 1.1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.dash-stat-value {
+  font-size: 2rem;
+  font-weight: 650;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.dash-stat-label {
+  margin-top: 0.3rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.dash-stat.is-attention {
+  background: var(--warn-bg);
+  border-color: var(--warn-line);
+}
+
+.dash-stat.is-attention .dash-stat-label { color: var(--warn); }
+
+/* Action cards */
+.dash-actions {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.dash-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.dash-action h3 { margin: 0 0 0.25rem; font-size: 1rem; }
+
+.dash-action p {
+  flex: 1;
+  margin: 0 0 1rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.dash-action.is-soon {
+  background: transparent;
+  border-style: dashed;
+}
+
+.dash-action.is-soon p { margin-bottom: 0; }
+
+.dash-action.is-soon .badge {
+  margin-left: 0.35rem;
+  vertical-align: middle;
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+
+/* Panels and tables */
+.dash-panel {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.25rem 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.dash-panel h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.dash-table { width: 100%; border-collapse: collapse; }
+
+.dash-table th,
+.dash-table td {
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.dash-table th:first-child,
+.dash-table td:first-child { padding-left: 0; }
+
+.dash-table th {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.dash-table tbody tr:last-child td { border-bottom: 0; }
+.dash-table a { color: var(--accent); font-weight: 600; }
+
+.dash-empty {
+  margin: 0;
+  padding: 0.5rem 0 1.25rem;
+  color: var(--muted);
+}
+
+/* Profile panel on the user dashboard */
+.dash-profile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: 1.25rem;
+}
+
+.dash-profile h2 { margin-bottom: 0.15rem; }
+.dash-profile p { margin: 0; color: var(--muted); font-size: 0.9rem; }
+.dash-profile-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+@media (max-width: 600px) {
+  .dash-hero { padding: 1.5rem 1.25rem 1.75rem; }
+  .dash-hero h1 { font-size: 1.5rem; }
+}

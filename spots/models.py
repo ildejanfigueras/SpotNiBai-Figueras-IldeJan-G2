@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db import models
+from django.db import models, transaction
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 
 class Category(models.Model):
@@ -68,3 +70,11 @@ class SpotPhoto(models.Model):
 
     def __str__(self):
         return f"Photo of {self.spot.name}"
+
+
+@receiver(post_delete, sender=SpotPhoto)
+def delete_photo_file(sender, instance, **kwargs):
+    """Remove the image file once its database row is gone (fixes ISS-02)."""
+    if instance.image:
+        storage, name = instance.image.storage, instance.image.name
+        transaction.on_commit(lambda: storage.delete(name))

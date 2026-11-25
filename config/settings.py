@@ -137,6 +137,30 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Media storage: Supabase Storage (S3-compatible)
+SUPABASE_PROJECT_REF = os.getenv("SUPABASE_PROJECT_REF")
+SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET", "spot-photos")
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "bucket_name": SUPABASE_BUCKET,
+            "access_key": os.getenv("SUPABASE_S3_ACCESS_KEY"),
+            "secret_key": os.getenv("SUPABASE_S3_SECRET_KEY"),
+            "endpoint_url": f"https://{SUPABASE_PROJECT_REF}.storage.supabase.co/storage/v1/s3",
+            "region_name": os.getenv("SUPABASE_REGION"),
+            "addressing_style": "path",
+            "querystring_auth": False,
+            "custom_domain": f"{SUPABASE_PROJECT_REF}.supabase.co/storage/v1/object/public/{SUPABASE_BUCKET}",
+            "file_overwrite": False,
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration

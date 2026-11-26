@@ -1,13 +1,16 @@
 from decimal import Decimal
 
 from django import forms
+from django.db import transaction
 
 from .models import Spot, SpotPhoto
+
 
 # Approximate bounding box that covers the province of Cebu
 CEBU_LAT_MIN, CEBU_LAT_MAX = Decimal("9.30"), Decimal("11.50")
 CEBU_LNG_MIN, CEBU_LNG_MAX = Decimal("123.10"), Decimal("124.40")
 MAX_PHOTO_SIZE = 5 * 1024 * 1024  # 5 MB
+ALLOWED_IMAGE_FORMATS = {"JPEG", "PNG"}
 
 
 class SpotForm(forms.ModelForm):
@@ -65,8 +68,13 @@ class SpotForm(forms.ModelForm):
 
     def clean_photo(self):
         photo = self.cleaned_data.get("photo")
-        if photo and photo.size > MAX_PHOTO_SIZE:
-            raise forms.ValidationError("The photo must be 5 MB or smaller.")
+        if photo:
+            if photo.size > MAX_PHOTO_SIZE:
+                raise forms.ValidationError("The photo must be 5 MB or smaller.")
+            # forms.ImageField has already opened the file with Pillow, so the
+            # real format is known (not just the file extension)
+            if photo.image.format not in ALLOWED_IMAGE_FORMATS:
+                raise forms.ValidationError("Upload a JPG or PNG image.")
         return photo
 
     def clean(self):
@@ -90,9 +98,11 @@ class SpotForm(forms.ModelForm):
         if spot.owner_id is None and self.owner is not None:
             spot.owner = self.owner
         if commit:
-            spot.save()
-            photo = self.cleaned_data.get("photo")
-            if photo:
-                spot.photos.filter(is_cover=True).delete()   # replace the old cover photo
-                SpotPhoto.objects.create(spot=spot, image=photo, is_cover=True)
+            # The spot and its cover photo are saved together or not at all
+            with transaction.atomic():
+                spot.save()
+                photo = self.cleaned_data.get("photo")
+                if photo:
+                    spot.photos.filter(is_cover=True).delete()   # replace the old cover photo
+                    SpotPhoto.objects.create(spot=spot, image=photo, is_cover=True)
         return spot

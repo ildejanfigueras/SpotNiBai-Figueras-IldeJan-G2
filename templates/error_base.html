@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Error{% endblock %} | SpotNiBai</title>
+  <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+  <style>
+    .error-page {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .error-page .brand { margin-bottom: 2.5rem; color: var(--ink); }
+    .error-page .brand-icon { fill: var(--accent); }
+    .error-code {
+      margin: 0 0 0.5rem;
+      font-size: 4.5rem;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+    }
+    .error-page .auth-subtitle { margin-bottom: 0; }
+    .error-page .btn { text-decoration: none; text-align: center; }
+  </style>
+</head>
+<body class="auth-page">
+  <main class="error-page">
+    <div class="auth-card">
+      <span class="brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill-rule="evenodd" d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z M12 7.4a2.6 2.6 0 1 1 0 5.2 2.6 2.6 0 0 1 0-5.2z"/>
+        </svg>
+        SpotNiBai
+      </span>
+      <p class="error-code">{% block code %}{% endblock %}</p>
+      <h1 class="auth-title">{% block heading %}{% endblock %}</h1>
+      <p class="auth-subtitle">{% block message %}{% endblock %}</p>
+      <a class="btn" href="/">Back to home</a>
+    </div>
+  </main>
+</body>
+</html>

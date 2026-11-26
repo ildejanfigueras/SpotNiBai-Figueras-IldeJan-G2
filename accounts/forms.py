@@ -1,9 +1,27 @@
+import re
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.core.files.uploadedfile import UploadedFile
+
 from .models import CustomUser
 
+MAX_PHOTO_SIZE = 5 * 1024 * 1024  # 5 MB
+ALLOWED_IMAGE_FORMATS = {"JPEG", "PNG"}
+PHONE_PATTERN = re.compile(r"\+?[0-9][0-9 \-]{5,17}[0-9]")
 
-class RegistrationForm(UserCreationForm):
+
+class ContactNumberMixin:
+    def clean_contact_number(self):
+        number = self.cleaned_data.get("contact_number", "").strip()
+        if number and not PHONE_PATTERN.fullmatch(number):
+            raise forms.ValidationError(
+                "Enter a valid contact number (digits, spaces or dashes, optionally starting with +)."
+            )
+        return number
+
+
+class RegistrationForm(ContactNumberMixin, UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = ("username", "email", "first_name", "last_name", "contact_number")
@@ -19,7 +37,8 @@ class RegistrationForm(UserCreationForm):
             raise forms.ValidationError("An account with this email already exists.")
         return email
 
-class ProfileUpdateForm(forms.ModelForm):
+
+class ProfileUpdateForm(ContactNumberMixin, forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ("first_name", "last_name", "email", "contact_number", "profile_photo")
@@ -29,3 +48,13 @@ class ProfileUpdateForm(forms.ModelForm):
         if CustomUser.objects.filter(email__iexact=email).exclude(pk=self.instance.pk).exists():
             raise forms.ValidationError("This email is already used by another account.")
         return email
+
+    def clean_profile_photo(self):
+        photo = self.cleaned_data.get("profile_photo")
+        # Only check a newly uploaded file, not the photo already saved in storage
+        if isinstance(photo, UploadedFile):
+            if photo.size > MAX_PHOTO_SIZE:
+                raise forms.ValidationError("The photo must be 5 MB or smaller.")
+            if photo.image.format not in ALLOWED_IMAGE_FORMATS:
+                raise forms.ValidationError("Upload a JPG or PNG image.")
+        return photo

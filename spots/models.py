@@ -3,6 +3,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models, transaction
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.db.models.functions import Lower
 
 
 class Category(models.Model):
@@ -49,6 +50,17 @@ class Spot(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        constraints = [
+            # Same owner can't submit the same name + address twice (case-insensitive)
+            models.UniqueConstraint(
+                Lower("name"), Lower("address"), "owner",
+                name="unique_spot_per_owner_name_address",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(avg_rating__gte=0, avg_rating__lte=5),
+                name="spot_avg_rating_between_0_and_5",
+            ),
+        ]
 
     def __str__(self):
         return self.name
@@ -67,6 +79,15 @@ class SpotPhoto(models.Model):
     image = models.ImageField(upload_to="spot_photos/", max_length=255)
     is_cover = models.BooleanField(default=False)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["spot"],
+                condition=models.Q(is_cover=True),
+                name="one_cover_photo_per_spot",
+            ),
+        ]
 
     def __str__(self):
         return f"Photo of {self.spot.name}"

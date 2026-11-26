@@ -15,6 +15,8 @@ from dashboard.views import RoleRequiredMixin
 from .forms import SpotForm
 from .models import Category, Spot
 
+from django.db import transaction
+
 class SpotListView(LoginRequiredMixin, ListView):
     """Browse approved spots, with search and a category filter."""
     model = Spot
@@ -163,8 +165,16 @@ class SpotReviewActionView(RoleRequiredMixin, View):
     success_text = ""
 
     def post(self, request, pk):
-        spot = get_object_or_404(Spot, pk=pk)
-        spot.status = self.new_status
-        spot.save(update_fields=["status", "updated_at"])
+        with transaction.atomic():
+            spot = get_object_or_404(Spot.objects.select_for_update(), pk=pk)
+            if spot.status != Spot.Status.PENDING:
+                messages.warning(
+                    request,
+                    f'"{spot.name}" was already reviewed '
+                    f"(status: {spot.get_status_display()}). No changes were made.",
+                )
+                return redirect("spots:review_queue")
+            spot.status = self.new_status
+            spot.save(update_fields=["status", "updated_at"])
         messages.success(request, f'"{spot.name}" {self.success_text}')
         return redirect("spots:review_queue")

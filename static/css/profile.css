@@ -1,0 +1,111 @@
+/* SpotNiBai profile pages. Load after dashboard.css and spots.css,
+   which supply the palette, cards, buttons and messages. */
+
+body.profile-page .profile-card,
+body.profile-page .profile-form-card {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Header band with the same street grid as the hero */
+.profile-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.75rem;
+  color: #fff;
+  background: var(--sea-900);
+}
+
+.profile-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+.profile-banner > * { position: relative; }
+
+.profile-banner h1 {
+  margin: 0 0 0.4rem;
+  font-size: 1.4rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.profile-banner .badge { background: var(--sand); color: var(--sea-900); }
+
+body.profile-page .avatar {
+  width: 84px;
+  height: 84px;
+  border: 3px solid rgba(255, 255, 255, 0.85);
+}
+
+body.profile-page .avatar-placeholder {
+  background: var(--accent);
+  color: #fff;
+  font-size: 2rem;
+}
+
+.profile-body { padding: 1.5rem 1.75rem 1.75rem; }
+
+body.profile-page .detail-list { margin-bottom: 1.5rem; }
+body.profile-page .detail-list li { padding: 0.8rem 0; border-bottom-color: var(--line); }
+body.profile-page .detail-list li:last-child { border-bottom: 0; }
+body.profile-page .detail-list span { color: var(--muted); font-size: 0.9rem; }
+
+/* Edit form */
+.profile-form-head { padding: 1.5rem 1.75rem 0; }
+.profile-form-head h1 { margin: 0 0 0.25rem; font-size: 1.5rem; font-weight: 650; letter-spacing: -0.01em; }
+.profile-form-head p { margin: 0; color: var(--muted); font-size: 0.9rem; }
+
+.profile-form-card form { padding: 1.25rem 1.75rem 1.75rem; }
+
+body.profile-page form p { margin: 0 0 1.1rem; }
+
+body.profile-page form label {
+  margin-bottom: 0.35rem;
+  font-size: 0.875rem;
+}
+
+body.profile-page input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--muted);
+  background: var(--wash);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+}
+
+body.profile-page input[type="file"]::file-selector-button {
+  margin-right: 0.75rem;
+  padding: 0.4rem 0.8rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+body.profile-page input[type="checkbox"] { accent-color: var(--accent); }
+body.profile-page .errorlist { margin: 0 0 0.35rem; }
+
+.profile-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+@media (max-width: 600px) {
+  .profile-banner { padding: 1.5rem 1.25rem; }
+  .profile-body, .profile-form-head, .profile-form-card form { padding-left: 1.25rem; padding-right: 1.25rem; }
+}

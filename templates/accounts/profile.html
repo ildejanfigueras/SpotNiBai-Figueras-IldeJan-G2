@@ -1,23 +1,29 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}My Profile | SpotNiBai{% endblock %}
+{% block body_class %}spots-page profile-page{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/dashboard.css' %}"><link rel="stylesheet" href="{% static 'css/spots.css' %}"><link rel="stylesheet" href="{% static 'css/profile.css' %}">{% endblock %}
+
 {% block content %}
 <div class="card profile-card">
-  <div class="profile-header">
+  <div class="profile-banner">
     {% if user.profile_photo %}
       <img class="avatar" src="{{ user.profile_photo.url }}" alt="Profile photo">
     {% else %}
       <div class="avatar avatar-placeholder">{{ user.username|first|upper }}</div>
     {% endif %}
     <div>
-      <h2>{{ user.get_full_name|default:user.username }}</h2>
+      <h1>{{ user.get_full_name|default:user.username }}</h1>
       <span class="badge">{{ user.get_role_display }}</span>
     </div>
   </div>
-  <ul class="detail-list">
-    <li><span>Username</span><strong>{{ user.username }}</strong></li>
-    <li><span>Email</span><strong>{{ user.email }}</strong></li>
-    <li><span>Contact number</span><strong>{{ user.contact_number|default:"Not set" }}</strong></li>
-  </ul>
-  <a class="btn btn-primary" href="{% url 'accounts:profile_edit' %}">Edit profile</a>
+  <div class="profile-body">
+    <ul class="detail-list">
+      <li><span>Username</span><strong>{{ user.username }}</strong></li>
+      <li><span>Email</span><strong>{{ user.email }}</strong></li>
+      <li><span>Contact number</span><strong>{{ user.contact_number|default:"Not set" }}</strong></li>
+    </ul>
+    <a class="btn btn-primary" href="{% url 'accounts:profile_edit' %}">Edit profile</a>
+  </div>
 </div>
 {% endblock %}

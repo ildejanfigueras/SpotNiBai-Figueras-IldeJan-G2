@@ -36,3 +36,7 @@ class ProfileUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+    
+    def form_invalid(self, form):
+        messages.error(self.request, "Please fix the errors below and try again.")
+        return super().form_invalid(form)
